@@ -5,7 +5,6 @@ import { UserMediator } from '../../mediators/user.mediator';
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css'],
-  providers: [UserMediator]
 })
 export class NavComponent implements OnInit {
 

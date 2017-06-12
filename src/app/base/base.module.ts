@@ -9,7 +9,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { UserEffects } from './effects/user.effect';
-import { UserService } from './services/user.service';
+import { UserMediator } from './mediators/user.mediator';
 
 @NgModule({
   imports: [

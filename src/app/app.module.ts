@@ -23,6 +23,9 @@ import { UserService } from './base/services/user.service';
 import { AuthenticatedGuard } from './base/guards/authenticated.guard';
 import { LoginPageGuard } from './base/guards/login-page.guard';
 
+// Mediator
+import { UserMediator } from './base/mediators/user.mediator';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -42,6 +45,7 @@ import { LoginPageGuard } from './base/guards/login-page.guard';
         AuthenticatedGuard,
         LoginPageGuard,
         UserService,
+        UserMediator,
 
         // providers used to create fake backend
         fakeBackendProvider,

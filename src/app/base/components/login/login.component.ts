@@ -11,7 +11,6 @@ import 'rxjs/add/operator/filter';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
-  providers: [UserMediator]
 })
 export class LoginComponent implements OnInit {
 

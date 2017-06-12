@@ -1,6 +1,9 @@
-import { User } from './../models/user.model';
-import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
+
+// Observalble
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/distinctUntilChanged';
+
 // @ngrx
 import { Store } from '@ngrx/store';
 import { go } from '@ngrx/router-store';
@@ -9,6 +12,9 @@ import { go } from '@ngrx/router-store';
 import { AuthenticateAction } from '../actions/index';
 import { State } from '../../store/app.reducer';
 import { SignOutAction } from '../actions/user.action';
+
+// models
+import { User } from './../models/user.model';
 
 // selectors
 import {
@@ -56,6 +62,7 @@ export class UserMediator {
 
     // subscribe to authenticated
     this.isAuthenticated$
+      .distinctUntilChanged()
       .subscribe(authenticated => {
         if (authenticated) {
           this.store.dispatch(go('/home'));
