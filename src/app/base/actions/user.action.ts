@@ -7,6 +7,9 @@ import { type } from '../../shared/utils/index';
 // import models
 import { User } from '../models/index';
 
+/**
+ * User action types
+ */
 export const ActionTypes = {
   AUTHENTICATE: type('[User] Authenticate'),
   AUTHENTICATE_ERROR: type('[User] Authentication error'),
@@ -14,6 +17,9 @@ export const ActionTypes = {
   AUTHENTICATED: type('[User] Authenticated'),
   AUTHENTICATED_ERROR: type('[User] Authenticated error'),
   AUTHENTICATED_SUCCESS: type('[User] Authenticated success'),
+  SIGN_OUT: type('[User] Sign out'),
+  SIGN_OUT_ERROR: type('[User] Sign out error'),
+  SIGN_OUT_SUCCESS: type('[User] Sign out success'),
 };
 
 /**
@@ -83,6 +89,36 @@ export class AuthenticationSuccessAction implements Action {
 }
 
 /**
+ * Sign out.
+ * @class SignOutAction
+ * @implements {Action}
+ */
+export class SignOutAction implements Action {
+  public type: string = ActionTypes.SIGN_OUT;
+  constructor(public payload?: any) {}
+}
+
+/**
+ * Sign out error.
+ * @class SignOutErrorAction
+ * @implements {Action}
+ */
+export class SignOutErrorAction implements Action {
+  public type: string = ActionTypes.SIGN_OUT_SUCCESS;
+  constructor(public payload?: any) {}
+}
+
+/**
+ * Sign out success.
+ * @class SignOutSuccessAction
+ * @implements {Action}
+ */
+export class SignOutSuccessAction implements Action {
+  public type: string = ActionTypes.SIGN_OUT_SUCCESS;
+  constructor(public payload?: any) {}
+}
+
+/**
  * Actions type.
  * @type {Actions}
  */
@@ -92,4 +128,8 @@ export type Actions =
   | AuthenticatedErrorAction
   | AuthenticatedSuccessAction
   | AuthenticationErrorAction
-  | AuthenticationSuccessAction;
+  | AuthenticationSuccessAction
+  | SignOutAction
+  | SignOutSuccessAction
+  | SignOutErrorAction
+  ;

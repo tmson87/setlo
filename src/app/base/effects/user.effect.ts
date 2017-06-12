@@ -8,6 +8,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/switchMap';
 
 // import services
@@ -22,26 +23,17 @@ import {
   AuthenticatedErrorAction,
   AuthenticatedSuccessAction,
   AuthenticationErrorAction,
-  AuthenticationSuccessAction
+  AuthenticationSuccessAction,
+  SignOutSuccessAction,
+  SignOutErrorAction
 } from '../actions/index';
 
 /**
- * Effects offer a way to isolate and easily test side-effects within your
- * application.
- * The `toPayload` helper function returns just
- * the payload of the currently dispatched action, useful in
- * instances where the current state is not necessary.
+ * Effects for User reducers
  *
- * Documentation on `toPayload` can be found here:
- * https://github.com/ngrx/effects/blob/master/docs/api.md#topayload
- *
- * If you are unfamiliar with the operators being used in these examples, please
- * check out the sources below:
- *
- * Official Docs: http://reactivex.io/rxjs/manual/overview.html#categories-of-operators
- * RxJS 5 Operators By Example: https://gist.github.com/btroncone/d6cf141d6f2c00dc6b35
+ * @export
+ * @class UserEffects
  */
-
 @Injectable()
 export class UserEffects {
 
@@ -60,33 +52,6 @@ export class UserEffects {
     });
 
   /**
-   * Determine if the user is authenticated.
-   */
-  @Effect()
-  public authenticated: Observable<Action> = this.actions
-    .ofType(ActionTypes.AUTHENTICATED)
-    .map(toPayload)
-    .switchMap(payload => {
-      return this.userService.authenticatedUser()
-        .map(user => new AuthenticatedSuccessAction({ authenticated: (user !== null), user: user }))
-        .catch(error => Observable.of(new AuthenticatedErrorAction({ error: error })));
-    });
-
-  /**
-   * Create a new user.
-   */
-  @Effect()
-  public createUser: Observable<Action> = this.actions
-    .ofType(ActionTypes.SIGN_UP)
-    .debounceTime(500)
-    .map(toPayload)
-    .switchMap(payload => {
-      return this.userService.create(payload.user)
-        .map(user => new SignUpSuccessAction({ user: user }))
-        .catch(error => Observable.of(new SignUpErrorAction({ error: error })));
-    });
-
-  /**
    * Terminate user session.
    */
   @Effect()
@@ -94,7 +59,7 @@ export class UserEffects {
     .ofType(ActionTypes.SIGN_OUT)
     .map(toPayload)
     .switchMap(payload => {
-      return this.userService.signout()
+      return this.userService.signOut()
         .map(value => new SignOutSuccessAction())
         .catch(error => Observable.of(new SignOutErrorAction({ error: error })));
     });

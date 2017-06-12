@@ -13,11 +13,11 @@ import { UserStorage } from '../storages/user.storage';
 import { State } from '../reducers/user.reducer';
 
 /**
- * Prevent unauthorized activating and loading of routes
- * @class AuthenticatedGuard
+ * Redirect to home if already logged in
+ * @class LoginPageGuard
  */
 @Injectable()
-export class AuthenticatedGuard implements CanActivate {
+export class LoginPageGuard implements CanActivate {
 
   /**
    * @constructor
@@ -25,16 +25,16 @@ export class AuthenticatedGuard implements CanActivate {
   constructor(private store: Store<State>) {}
 
   /**
-   * True when user is authenticated
+   * True when user is not authenticated
    * @method canActivate
    */
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
     const authenticated = UserStorage.isAuthenticated();
 
-    if (!authenticated) {
-      this.store.dispatch(go('/login'));
+    if (authenticated) {
+      this.store.dispatch(go('/home'));
     }
 
-    return authenticated;
+    return !authenticated;
   }
 }

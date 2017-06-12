@@ -7,6 +7,9 @@ import { SettingComponent } from './components/setting/setting.component';
 import { ClarityModule } from 'clarity-angular';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EffectsModule } from '@ngrx/effects';
+import { UserEffects } from './effects/user.effect';
+import { UserService } from './services/user.service';
 
 @NgModule({
   imports: [
@@ -14,8 +17,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ClarityModule.forChild(),
     FormsModule,
     ReactiveFormsModule,
+    EffectsModule.run(UserEffects),
   ],
   declarations: [LoginComponent, HomeComponent, NavComponent, SettingComponent, NotFoundComponent],
-  exports: [LoginComponent, HomeComponent, NavComponent, SettingComponent, NotFoundComponent]
+  exports: [LoginComponent, HomeComponent, NavComponent, SettingComponent, NotFoundComponent],
 })
 export class BaseModule { }

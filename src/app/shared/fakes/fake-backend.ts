@@ -4,7 +4,14 @@ import { MockBackend, MockConnection } from '@angular/http/testing';
 export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOptions) {
     // configure fake backend
     backend.connections.subscribe((connection: MockConnection) => {
-        const testUser = { username: 'test', password: 'test', firstName: 'Test', lastName: 'User' };
+        const testUser = {
+          id: '123',
+          email: 'test',
+          password: 'test',
+          firstName: 'Test',
+          lastName: 'User',
+          token: 'ABCDE',
+          exp: '2018-01-01T00:00:00z' };
 
         // wrap in timeout to simulate server api call
         setTimeout(() => {
@@ -12,16 +19,16 @@ export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOpt
             // fake authenticate api end point
             if (connection.request.url.endsWith('/auth') && connection.request.method === RequestMethod.Post) {
                 // get parameters from post request
-                const params = JSON.parse(connection.request.getBody());
+                const params = JSON.parse(connection.request.getBody()).params;
 
                 // check user credentials and return fake jwt token if valid
-                if (params.username === testUser.username && params.password === testUser.password) {
+                if (params.email === testUser.email && params.password === testUser.password) {
                     connection.mockRespond(new Response(
-                        new ResponseOptions({ status: 200, body: { token: 'fake-jwt-token' } })
+                        new ResponseOptions({ status: 200, body: { result: testUser } })
                     ));
                 } else {
                     connection.mockRespond(new Response(
-                        new ResponseOptions({ status: 200 })
+                        new ResponseOptions({ status: 200, body: { error: { message: 'Incorrect email or password' } } })
                     ));
                 }
             }

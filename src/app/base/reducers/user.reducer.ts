@@ -16,12 +16,6 @@ export interface State {
   // error message
   error?: string;
 
-  // true if we have attempted existing auth session
-  loaded: boolean;
-
-  // true when loading
-  loading: boolean;
-
   // the authenticated user
   user?: User;
 }
@@ -30,9 +24,7 @@ export interface State {
  * The initial state.
  */
 const initialState: State = {
-  authenticated: false,
-  loaded: false,
-  loading: false
+  authenticated: false
 };
 
 /**
@@ -45,44 +37,27 @@ export function reducer(state: any = initialState, action: Actions): State {
 
   switch (action.type) {
     case ActionTypes.AUTHENTICATE:
+    case ActionTypes.SIGN_OUT:
       return Object.assign({}, state, {
-        loading: true
       });
 
-    case ActionTypes.AUTHENTICATED_ERROR:
+    case ActionTypes.AUTHENTICATE_ERROR:
       return Object.assign({}, state, {
         authenticated: false,
-        error: action.payload.error.message,
-        loaded: true
+        error: action.payload.error.message
       });
 
-    case ActionTypes.AUTHENTICATED_SUCCESS:
+    case ActionTypes.AUTHENTICATE_SUCCESS:
       return Object.assign({}, state, {
-        authenticated: action.payload.authenticated,
-        loaded: true,
+        authenticated: true,
         user: action.payload.user
       });
 
-    case ActionTypes.AUTHENTICATED_ERROR:
+    case ActionTypes.SIGN_OUT_SUCCESS:
       return Object.assign({}, state, {
         authenticated: false,
-        error: action.payload.error.message,
-        loading: false
-      });
-
-    case ActionTypes.AUTHENTICATED_SUCCESS:
-      const user: User = action.payload.user;
-
-      // verify user is not null
-      if (user === null) {
-        return state;
-      }
-
-      return Object.assign({}, state, {
-        authenticated: true,
         error: undefined,
-        loading: false,
-        user: user
+        user: undefined
       });
 
     default:
@@ -99,14 +74,6 @@ export function reducer(state: any = initialState, action: Actions): State {
 export const isAuthenticated = (state: State) => state.authenticated;
 
 /**
- * Returns true if the authenticated has loaded.
- * @function isAuthenticatedLoaded
- * @param {State} state
- * @returns {boolean}
- */
-export const isAuthenticatedLoaded = (state: State) => state.loaded;
-
-/**
  * Return the users state
  * @function getAuthenticatedUser
  * @param {State} state
@@ -121,11 +88,3 @@ export const getAuthenticatedUser = (state: State) => state.user;
  * @returns {Error}
  */
 export const getAuthenticationError = (state: State) => state.error;
-
-/**
- * Returns true if request is in progress.
- * @function isLoading
- * @param {State} state
- * @returns {boolean}
- */
-export const isLoading = (state: State) => state.loading;

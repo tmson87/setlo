@@ -1,4 +1,3 @@
-import { AuthenticatedGuard } from './base/guards/authenticated.guard';
 import { AppRoutingModule } from './app-routing.module';
 import { BaseModule } from './base/base.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,6 +16,13 @@ import { StoreModule } from '@ngrx/store';
 import { reducer } from 'app/store/index';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+// Services
+import { UserService } from './base/services/user.service';
+
+// Guards
+import { AuthenticatedGuard } from './base/guards/authenticated.guard';
+import { LoginPageGuard } from './base/guards/login-page.guard';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -34,8 +40,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
   ],
   providers: [
         AuthenticatedGuard,
-        // AuthenticationService,
-        // UserService,
+        LoginPageGuard,
+        UserService,
 
         // providers used to create fake backend
         fakeBackendProvider,

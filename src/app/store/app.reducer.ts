@@ -1,6 +1,3 @@
-// reselect
-import { createSelector } from 'reselect';
-
 // @ngrx
 import { ActionReducer, combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
@@ -36,7 +33,7 @@ export interface State {
  */
 const reducers = {
   router: routerReducer,
-  users: user.reducer
+  user: user.reducer
 };
 
 // development reducer includes storeFreeze to prevent state from being mutated
@@ -59,59 +56,10 @@ export function reducer(state: any, action: any) {
   }
 }
 
-/**********************************************************
- * Users Reducers
- *********************************************************/
-
 /**
  * Returns the user state.
  * @function getUserState
  * @param {State} state Top level state.
  * @return {State}
  */
-export const getUserState = (state: State) => state.user;
-
-/**
- * Returns the authenticated user
- * @function getAuthenticatedUser
- * @param {State} state
- * @param {any} props
- * @return {User}
- */
-export const getAuthenticatedUser = createSelector(getUserState, user.getAuthenticatedUser);
-
-/**
- * Returns the authentication error.
- * @function getAuthenticationError
- * @param {State} state
- * @param {any} props
- * @return {Error}
- */
-export const getAuthenticationError = createSelector(getUserState, user.getAuthenticationError);
-
-/**
- * Returns true if the user is authenticated
- * @function isAuthenticated
- * @param {State} state
- * @param {any} props
- * @return {boolean}
- */
-export const isAuthenticated = createSelector(getUserState, user.isAuthenticated);
-
-/**
- * Returns true if the user is authenticated
- * @function isAuthenticated
- * @param {State} state
- * @param {any} props
- * @return {boolean}
- */
-export const isAuthenticatedLoaded = createSelector(getUserState, user.isAuthenticatedLoaded);
-
-/**
- * Returns true if the authentication request is loading.
- * @function isAuthenticationLoading
- * @param {State} state
- * @param {any} props
- * @return {boolean}
- */
-export const isAuthenticationLoading = createSelector(getUserState, user.isLoading);
+export const getUsersState = (state: State) => state.user;

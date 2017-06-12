@@ -1,4 +1,5 @@
 <clr-header>
     <div class="header-nav" [clr-nav-level]="1">
+      <button *ngIf="!isAuthenticated" class="btn btn-primary" (click)="signOut()">Log out</button>
     </div>
 </clr-header>

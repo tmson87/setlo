@@ -1,4 +1,3 @@
-import { getAuthenticatedUser } from './../../store/app.reducer';
 import { User } from './../models/user.model';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -8,46 +7,89 @@ import { go } from '@ngrx/router-store';
 
 // actions
 import { AuthenticateAction } from '../actions/index';
+import { State } from '../../store/app.reducer';
+import { SignOutAction } from '../actions/user.action';
 
-// reducers
+// selectors
 import {
-  getUserState,
+  getAuthenticatedUser,
   getAuthenticationError,
-  isAuthenticated,
-  isAuthenticationLoading,
-  State
-} from '../../store/index';
+  isAuthenticated
+} from '../selectors/user.selector';
 
+/**
+ * Mediator for controlling User data
+ *
+ * @export
+ * @class UserMediator
+ */
 @Injectable()
 export class UserMediator {
-    users$ = getUserState;
+  /**
+   * The error if authentication fails.
+   * @type {Observable<string>}
+   */
+  public error$: Observable<string>;
 
-    constructor(private store: Store<State>) {
-    }
+  /**
+   * The user if authentication success.
+   * @type {Observable<User>}
+   */
+  public user$: Observable<User>;
 
-    public login(email: string, password: string) {
-        // trim values
-        email.trim();
-        password.trim();
+  /**
+   * Authenticated flag.
+   * @type {Observable<string>}
+   */
+  public isAuthenticated$: Observable<boolean>;
 
-        // set payload
-        const payload = {
-        email: email,
-        password: password
-        };
+/**
+ * Creates an instance of UserMediator.
+ * @param {Store<State>} store
+ *
+ * @memberof UserMediator
+ */
+  constructor(private store: Store<State>) {
+    this.user$ = this.store.select(getAuthenticatedUser);
+    this.error$ = this.store.select(getAuthenticationError);
+    this.isAuthenticated$ = this.store.select(isAuthenticated);
 
-        // dispatch AuthenticationAction and pass in payload
-        this.store.dispatch(new AuthenticateAction(payload));
-    }
+    // subscribe to authenticated
+    this.isAuthenticated$
+      .subscribe(authenticated => {
+        if (authenticated) {
+          this.store.dispatch(go('/home'));
+        } else {
+          this.store.dispatch(go('/login'));
+        }
+      });
+  }
 
-    /**
-     * Returns the authenticated user
-     * @returns {User}
-     */
-    public authenticatedUser(): Observable<User> {
-        // Normally you would do an HTTP request to determine if
-        // the user has an existing auth session on the server
-        // but, let's just return the mock user for this example.
-        return this.users$;
-    }
+/**
+ * Process Login
+ *
+ * @param {string} email
+ * @param {string} password
+ *
+ * @memberof UserMediator
+ */
+  public authenticate(email: string, password: string) {
+    // trim values
+    email.trim();
+    password.trim();
+
+    // set payload
+    const payload = {
+      email: email,
+      password: password
+    };
+
+    // dispatch AuthenticationAction and pass in payload
+    this.store.dispatch(new AuthenticateAction(payload));
+  }
+
+  public signOut() {
+    // dispatch SignOutAction
+    this.store.dispatch(new SignOutAction());
+  }
 }
