@@ -55,12 +55,16 @@ export class LoginComponent implements OnInit {
     this.error$ = this.mediator.error$;
   }
 
+  /**
+   * Init component
+   */
   ngOnInit() {
 
     // set formGroup
     this.form = this.formBuilder.group({
       email: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      rememberMe: true
     });
 
     // subscribe to success
@@ -90,12 +94,19 @@ export class LoginComponent implements OnInit {
     this.alive = false;
   }
 
+  /**
+   * Login request
+   *
+   * @memberof LoginComponent
+   */
   submit() {
     // get email and password values
     const email: string = this.form.get('email').value;
     const password: string = this.form.get('password').value;
+    const rememberMe: boolean = this.form.get('rememberMe').value;
+
     this.loading = true;
     this.hasError = false;
-    this.mediator.authenticate(email, password);
+    this.mediator.authenticate(email, password, rememberMe);
   }
 }

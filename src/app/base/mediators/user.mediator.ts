@@ -11,7 +11,7 @@ import { go } from '@ngrx/router-store';
 // actions
 import { AuthenticateAction } from '../actions/index';
 import { State } from '../../store/app.reducer';
-import { SignOutAction } from '../actions/user.action';
+import { SignOutAction, GetAuthenticatedAction } from '../actions/user.action';
 
 // models
 import { User } from './../models/user.model';
@@ -70,6 +70,9 @@ export class UserMediator {
           this.store.dispatch(go('/login'));
         }
       });
+
+    // Get authenticated user
+    this.store.dispatch(new GetAuthenticatedAction(null));
   }
 
 /**
@@ -80,7 +83,7 @@ export class UserMediator {
  *
  * @memberof UserMediator
  */
-  public authenticate(email: string, password: string) {
+  public authenticate(email: string, password: string, storeSession: boolean) {
     // trim values
     email.trim();
     password.trim();
@@ -88,13 +91,19 @@ export class UserMediator {
     // set payload
     const payload = {
       email: email,
-      password: password
+      password: password,
+      storeSession: storeSession
     };
 
     // dispatch AuthenticationAction and pass in payload
     this.store.dispatch(new AuthenticateAction(payload));
   }
 
+  /**
+   * Sign out
+   *
+   * @memberof UserMediator
+   */
   public signOut() {
     // dispatch SignOutAction
     this.store.dispatch(new SignOutAction());

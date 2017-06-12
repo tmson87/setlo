@@ -1,6 +1,15 @@
 // import type function
 import { type } from '../../shared/utils/index';
 
+// import selectors
+import { getAuthenticatedUser, isAuthenticated } from '../selectors/user.selector';
+
+// import rxjs
+import { Observable } from 'rxjs/Observable';
+
+// import models
+import { User } from '../models/user.model';
+
 /**
  * Contain field name to store User info
  */
@@ -48,6 +57,14 @@ export class UserStorage {
     localStorage.setItem(StorageField.TOKEN_EXP, user.exp);
   }
 
+  /**
+   * Check user is authenticated
+   *
+   * @static
+   * @returns
+   *
+   * @memberof UserStorage
+   */
   public static isAuthenticated() {
     if (localStorage.getItem(StorageField.TOKEN)) {
       const exp = localStorage.getItem(StorageField.TOKEN_EXP);
@@ -58,5 +75,28 @@ export class UserStorage {
       }
     }
     return false;
+  }
+
+  public static getAuthenticatedUser(): Observable<any> {
+    const userDat = localStorage.getItem(StorageField.USER);
+    if (null == userDat) {
+      return Observable.throw(new Error('No user info'));
+    }
+
+    if (!this.isAuthenticated()) {
+      return Observable.throw(new Error('Token is expired'));
+    }
+
+    const userInfo = JSON.parse(userDat);
+
+    const user = new User;
+    user.id = userInfo.id;
+    user.email = userInfo.email;
+    user.firstName = userInfo.firstName;
+    user.lastName = user.lastName;
+    user.token = localStorage.getItem(StorageField.TOKEN);
+    user.exp = localStorage.getItem(StorageField.TOKEN_EXP);
+
+    return Observable.of(user);
   }
 }

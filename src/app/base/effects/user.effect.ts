@@ -14,14 +14,17 @@ import 'rxjs/add/operator/switchMap';
 // import services
 import { UserService } from '../services/index';
 
+// import storage
+import { UserStorage } from '../storages/index';
+
 // import models
 import { User } from '../models/index';
 
 // import actions
 import {
   ActionTypes,
-  AuthenticatedErrorAction,
-  AuthenticatedSuccessAction,
+  GetAuthenticatedErrorAction,
+  GetAuthenticatedSuccessAction,
   AuthenticationErrorAction,
   AuthenticationSuccessAction,
   SignOutSuccessAction,
@@ -46,9 +49,23 @@ export class UserEffects {
     .debounceTime(500)
     .map(toPayload)
     .switchMap(payload => {
-      return this.userService.authenticate(payload.email, payload.password)
+      return this.userService.authenticate(payload.email, payload.password, payload.storeSession)
         .map(user => new AuthenticationSuccessAction({ user: user }))
         .catch(error => Observable.of(new AuthenticationErrorAction({ error: error })));
+    });
+
+  /**
+   * Get authenticated user from storage.
+   */
+  @Effect()
+  public getAuthenticated: Observable<Action> = this.actions
+    .ofType(ActionTypes.GET_AUTHENTICATED)
+    .debounceTime(500)
+    .map(toPayload)
+    .switchMap(payload => {
+      return UserStorage.getAuthenticatedUser()
+        .map(user => new GetAuthenticatedSuccessAction({ user: user }))
+        .catch(error => Observable.of(new GetAuthenticatedErrorAction({})));
     });
 
   /**

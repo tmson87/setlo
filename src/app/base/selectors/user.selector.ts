@@ -36,4 +36,13 @@ export const getAuthenticationError = createSelector(getUsersState, users.getAut
  */
 export const isAuthenticated = createSelector(getUsersState, users.isAuthenticated);
 
+/**
+ * Returns true if the user info is ready
+ * @function isAuthLoaded
+ * @param {State} state
+ * @param {any} props
+ * @return {boolean}
+ */
+export const isAuthLoaded = createSelector(getUsersState, users.isAuthLoaded);
+
 

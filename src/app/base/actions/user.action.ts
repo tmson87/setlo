@@ -14,9 +14,9 @@ export const ActionTypes = {
   AUTHENTICATE: type('[User] Authenticate'),
   AUTHENTICATE_ERROR: type('[User] Authentication error'),
   AUTHENTICATE_SUCCESS: type('[User] Authentication success'),
-  AUTHENTICATED: type('[User] Authenticated'),
-  AUTHENTICATED_ERROR: type('[User] Authenticated error'),
-  AUTHENTICATED_SUCCESS: type('[User] Authenticated success'),
+  GET_AUTHENTICATED: type('[User] Get Authenticated'),
+  GET_AUTHENTICATED_ERROR: type('[User] Get Authenticated error'),
+  GET_AUTHENTICATED_SUCCESS: type('[User] Get Authenticated success'),
   SIGN_OUT: type('[User] Sign out'),
   SIGN_OUT_ERROR: type('[User] Sign out error'),
   SIGN_OUT_SUCCESS: type('[User] Sign out success'),
@@ -31,39 +31,6 @@ export class AuthenticateAction implements Action {
   public type: string = ActionTypes.AUTHENTICATE;
 
   constructor(public payload: {email: string, password: string}) {}
-}
-
-/**
- * Checks if user is authenticated.
- * @class AuthenticatedAction
- * @implements {Action}
- */
-export class AuthenticatedAction implements Action {
-  public type: string = ActionTypes.AUTHENTICATED;
-
-  constructor(public payload?: {token?: string}) {}
-}
-
-/**
- * Authenticated check success.
- * @class AuthenticatedSuccessAction
- * @implements {Action}
- */
-export class AuthenticatedSuccessAction implements Action {
-  public type: string = ActionTypes.AUTHENTICATED_SUCCESS;
-
-  constructor(public payload: {authenticated: boolean, user: User}) {}
-}
-
-/**
- * Authenticated check error.
- * @class AuthenticatedErrorAction
- * @implements {Action}
- */
-export class AuthenticatedErrorAction implements Action {
-  public type: string = ActionTypes.AUTHENTICATED_ERROR;
-
-  constructor(public payload?: any) {}
 }
 
 /**
@@ -86,6 +53,39 @@ export class AuthenticationSuccessAction implements Action {
   public type: string = ActionTypes.AUTHENTICATE_SUCCESS;
 
   constructor(public payload: { user: User }) {}
+}
+
+/**
+ * Get authenticated user from storage
+ * @class GetAuthenticatedAction
+ * @implements {Action}
+ */
+export class GetAuthenticatedAction implements Action {
+  public type: string = ActionTypes.GET_AUTHENTICATED;
+
+  constructor(public payload?: any) {}
+}
+
+/**
+ * Get authenticated user from storage successfully
+ * @class GetAuthenticatedSuccessAction
+ * @implements {Action}
+ */
+export class GetAuthenticatedSuccessAction implements Action {
+  public type: string = ActionTypes.GET_AUTHENTICATED_SUCCESS;
+
+  constructor(public payload: {user: User}) {}
+}
+
+/**
+ * Get authenticated user from storage failed
+ * @class GetAuthenticatedErrorAction
+ * @implements {Action}
+ */
+export class GetAuthenticatedErrorAction implements Action {
+  public type: string = ActionTypes.GET_AUTHENTICATED_ERROR;
+
+  constructor(public payload?: any) {}
 }
 
 /**
@@ -124,9 +124,9 @@ export class SignOutSuccessAction implements Action {
  */
 export type Actions =
   AuthenticateAction
-  | AuthenticatedAction
-  | AuthenticatedErrorAction
-  | AuthenticatedSuccessAction
+  | GetAuthenticatedAction
+  | GetAuthenticatedErrorAction
+  | GetAuthenticatedSuccessAction
   | AuthenticationErrorAction
   | AuthenticationSuccessAction
   | SignOutAction

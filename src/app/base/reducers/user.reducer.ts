@@ -9,6 +9,8 @@ import { User } from '../models/user.model';
  * @interface State
  */
 export interface State {
+  // One should use state when loaded is true
+  loaded: boolean,
 
   // boolean if user is authenticated
   authenticated: boolean;
@@ -24,6 +26,7 @@ export interface State {
  * The initial state.
  */
 const initialState: State = {
+  loaded: false,
   authenticated: false
 };
 
@@ -37,20 +40,36 @@ export function reducer(state: any = initialState, action: Actions): State {
 
   switch (action.type) {
     case ActionTypes.AUTHENTICATE:
+    case ActionTypes.GET_AUTHENTICATED:
     case ActionTypes.SIGN_OUT:
       return Object.assign({}, state, {
       });
 
+    case ActionTypes.AUTHENTICATE_SUCCESS:
+      return Object.assign({}, state, {
+        loaded: true,
+        authenticated: true,
+        user: action.payload.user
+      });
+
     case ActionTypes.AUTHENTICATE_ERROR:
       return Object.assign({}, state, {
+        loaded: true,
         authenticated: false,
         error: action.payload.error.message
       });
 
-    case ActionTypes.AUTHENTICATE_SUCCESS:
+    case ActionTypes.GET_AUTHENTICATED_SUCCESS:
       return Object.assign({}, state, {
+        loaded: true,
         authenticated: true,
         user: action.payload.user
+      });
+
+    case ActionTypes.GET_AUTHENTICATED_ERROR:
+      return Object.assign({}, state, {
+        loaded: true,
+        authenticated: false,
       });
 
     case ActionTypes.SIGN_OUT_SUCCESS:
@@ -64,6 +83,14 @@ export function reducer(state: any = initialState, action: Actions): State {
       return state;
   }
 }
+
+/**
+ * Returns true if the auth is loaded.
+ * @function isAuthenticated
+ * @param {State} state
+ * @returns {boolean}
+ */
+export const isAuthLoaded = (state: State) => state.loaded;
 
 /**
  * Returns true if the user is authenticated.

@@ -1,12 +1,15 @@
-import {session} from 'webdriver-js-extender/built/spec/mock-server/commands';
 import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 
+// import rxjs
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/observable/of';
 
+// import model
 import { User } from '../models/user.model';
+
+// import storage
 import { UserStorage } from '../storages/user.storage';
 
 /**
@@ -28,7 +31,7 @@ export class UserService {
    *
    * @memberof UserService
    */
-  public authenticate(email: string, password: string): Observable<User> {
+  public authenticate(email: string, password: string, storeSession: boolean): Observable<User> {
     UserStorage.clear();
 
     const msg = {
@@ -46,13 +49,16 @@ export class UserService {
           if (result) {
             const user = new User();
 
-            // Store user information
             user.id = result.id;
             user.email = result.email;
             user.firstName = result.firstName;
             user.lastName = result.lastName;
             user.token = result.token;
-            UserStorage.store(result);
+
+            // Store user information
+            if (storeSession) {
+              UserStorage.store(result);
+            }
 
             return Observable.of(user);
           } else {
