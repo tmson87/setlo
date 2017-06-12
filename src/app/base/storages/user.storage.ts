@@ -26,7 +26,7 @@ export class UserStorage {
    * @memberof UserStorage
    */
   public static clear() {
-    Object.keys(StorageField).map((key) => { localStorage.removeItem(key) });
+    Object.keys(StorageField).map((key) => { localStorage.removeItem(StorageField[key]) });
   }
 
   /**
