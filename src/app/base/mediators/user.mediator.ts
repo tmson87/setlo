@@ -16,6 +16,9 @@ import { SignOutAction, GetAuthenticatedAction } from '../actions/user.action';
 // models
 import { User } from './../models/user.model';
 
+// import mediators
+import { RouterMediator } from './router.mediator';
+
 // selectors
 import {
   getAuthenticatedUser,
@@ -55,7 +58,7 @@ export class UserMediator {
  *
  * @memberof UserMediator
  */
-  constructor(private store: Store<State>) {
+  constructor(private store: Store<State>, private routerMediator: RouterMediator) {
     this.user$ = this.store.select(getAuthenticatedUser);
     this.error$ = this.store.select(getAuthenticationError);
     this.isAuthenticated$ = this.store.select(isAuthenticated);
@@ -65,9 +68,9 @@ export class UserMediator {
       .distinctUntilChanged()
       .subscribe(authenticated => {
         if (authenticated) {
-          this.store.dispatch(go('/home'));
+          routerMediator.goto('/home');
         } else {
-          this.store.dispatch(go('/login'));
+          routerMediator.goto('/login');
         }
       });
 

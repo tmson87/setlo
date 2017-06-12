@@ -54,13 +54,15 @@ export class UserService {
             user.firstName = result.firstName;
             user.lastName = result.lastName;
             user.token = result.token;
+            user.exp = result.exp;
+            user.role = result.role;
 
             // Store user information
             if (storeSession) {
               UserStorage.store(result);
             }
 
-            return Observable.of(user);
+            return user;
           } else {
             const error = jsonBody.error;
             if (error) {

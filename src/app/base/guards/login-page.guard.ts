@@ -3,13 +3,16 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angul
 
 // import rxjs
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/mergeMap';
 
 // import store
 import { Store } from '@ngrx/store';
 import { go } from '@ngrx/router-store';
 import { State } from '../../store/app.reducer';
 import { isAuthenticated, isAuthLoaded } from '../selectors/user.selector';
-import 'rxjs/add/operator/mergeMap';
+
+// import mediators
+import { RouterMediator } from '../mediators/index';
 
 /**
  * Redirect to home if already logged in
@@ -19,12 +22,13 @@ import 'rxjs/add/operator/mergeMap';
 export class LoginPageGuard implements CanActivate {
 
   /**
-   * Creates an instance of LoginPageGuard.
+   * Creates an instance of AuthenticatedGuard.
    * @param {Store<State>} store
+   * @param {RouterMediator} routerMediator
    *
    * @memberof LoginPageGuard
    */
-  constructor(private store: Store<State>) {}
+  constructor(private store: Store<State>, private routerMediator: RouterMediator) {}
 
   /**
    * True when user is not authenticated
@@ -43,7 +47,7 @@ export class LoginPageGuard implements CanActivate {
     // redirect to sign in page if user is not authenticated
     observable$.subscribe(canActive => {
       if (!canActive) {
-        this.store.dispatch(go('/home'));
+        this.routerMediator.goto('/home');
       }
     });
 

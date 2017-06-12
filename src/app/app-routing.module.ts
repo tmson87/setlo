@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './base/components/login/login.component';
 import { NotFoundComponent } from './base/components/not-found/not-found.component';
 import { HomeComponent } from './base/components/home/home.component';
+import { RootQuestionBankComponent } from './question-bank/components/root-question-bank/root-question-bank.component';
+import { RootOnlineTestComponent } from './online-test/components/root-online-test/root-online-test.component';
 
 // import guards
 import { AuthenticatedGuard } from './base/guards/authenticated.guard';
@@ -25,6 +27,16 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [AuthenticatedGuard]
+  },
+  {
+    path: 'question-bank',
+    component: RootQuestionBankComponent,
+    canActivate: [AuthenticatedGuard]
+  },
+  {
+    path: 'online-test',
+    component: RootOnlineTestComponent,
     canActivate: [AuthenticatedGuard]
   },
   {

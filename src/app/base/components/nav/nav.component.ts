@@ -1,18 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { UserMediator } from '../../mediators/user.mediator';
 
+// import mediators
+import { UserMediator, RouterMediator } from '../../mediators/index';
+
+// import rxjs
+import { Observable } from 'rxjs/Observable';
+
+// import models
+import { User } from '../../models/user.model';
+
+/**
+ * Navigation bar component
+ *
+ * @export
+ * @class NavComponent
+ * @implements {OnInit}
+ */
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
   styleUrls: ['./nav.component.css'],
 })
 export class NavComponent implements OnInit {
-
   /**
-   * Component error.
+   * Authenticated flag.
    * @type {boolean}
    */
   private isAuthenticated = false;
+
+  /**
+   * User role flag.
+   * @type {boolean}
+   */
+  private canUseQuestionBank = false;
+
+  /**
+   * User role flag.
+   * @type {boolean}
+   */
+  private canUseOnlineTest = false;
 
   /**
    * Component state.
@@ -20,7 +46,15 @@ export class NavComponent implements OnInit {
    */
   private alive = true;
 
-  constructor(private mediator: UserMediator) { }
+  /**
+   * Creates an instance of NavComponent.
+   * @param {UserMediator} userMediator
+   * @param {RouterMediator} routerMediator
+   *
+   * @memberof NavComponent
+   */
+  constructor(private userMediator: UserMediator, private routerMediator: RouterMediator) {
+  }
 
   /**
    * Init Component
@@ -28,10 +62,19 @@ export class NavComponent implements OnInit {
    * @memberof NavComponent
    */
   ngOnInit() {
-    this.mediator.isAuthenticated$
+
+    this.userMediator.isAuthenticated$
       .takeWhile(() => this.alive)
       .subscribe(value => {
         this.isAuthenticated = value;
+      });
+    this.userMediator.user$
+      .takeWhile(() => this.alive)
+      .subscribe(user => {
+        // tslint:disable-next-line:no-bitwise
+        this.canUseQuestionBank = (user !== undefined) && ((user.role & 0x0F) !== 0);
+        // tslint:disable-next-line:no-bitwise
+        this.canUseOnlineTest = (user !== undefined) && ((user.role & 0xF0) !== 0);
       });
   }
 
@@ -44,8 +87,23 @@ export class NavComponent implements OnInit {
     this.alive = false;
   }
 
-  signOut() {
-    this.mediator.signOut();
+  /**
+   * Sign out
+   *
+   * @memberof NavComponent
+   */
+  public signOut() {
+    this.userMediator.signOut();
   }
 
+  /**
+   * Navigate to path
+   *
+   * @param {string} path
+   *
+   * @memberof NavComponent
+   */
+  public navigate(path: string) {
+    this.routerMediator.goto(path);
+  }
 }

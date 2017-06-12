@@ -11,7 +11,9 @@ export function fakeBackendFactory(backend: MockBackend, options: BaseRequestOpt
           firstName: 'Test',
           lastName: 'User',
           token: 'ABCDE',
-          exp: '2018-01-01T00:00:00z' };
+          exp: '2018-01-01T00:00:00z',
+          role: 0xFF,
+        };
 
         // wrap in timeout to simulate server api call
         setTimeout(() => {

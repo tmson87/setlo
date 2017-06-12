@@ -11,6 +11,9 @@ import { go } from '@ngrx/router-store';
 import { State, getUsersState } from '../../store/app.reducer';
 import { isAuthenticated, isAuthLoaded } from '../selectors/user.selector';
 
+// import mediators
+import { RouterMediator } from '../mediators/index';
+
 /**
  * Prevent unauthorized activating and loading of routes
  * @class AuthenticatedGuard
@@ -21,10 +24,11 @@ export class AuthenticatedGuard implements CanActivate {
   /**
    * Creates an instance of AuthenticatedGuard.
    * @param {Store<State>} store
+   * @param {RouterMediator} routerMediator
    *
    * @memberof AuthenticatedGuard
    */
-  constructor(private store: Store<State>) {}
+  constructor(private store: Store<State>, private routerMediator: RouterMediator) {}
 
   /**
    * True when user is authenticated
@@ -46,7 +50,7 @@ export class AuthenticatedGuard implements CanActivate {
     // redirect to log in page if user is not authenticated
     observable$.subscribe(authenticated => {
       if (!authenticated) {
-        this.store.dispatch(go('/login'));
+        this.routerMediator.goto('/login');
       }
     });
 

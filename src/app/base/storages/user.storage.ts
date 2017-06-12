@@ -51,7 +51,8 @@ export class UserStorage {
       id: user.id,
       email: user.email,
       firstName: user.firstName,
-      lastName: user.lastName
+      lastName: user.lastName,
+      role: user.role
     }));
     localStorage.setItem(StorageField.TOKEN, user.token);
     localStorage.setItem(StorageField.TOKEN_EXP, user.exp);
@@ -93,7 +94,8 @@ export class UserStorage {
     user.id = userInfo.id;
     user.email = userInfo.email;
     user.firstName = userInfo.firstName;
-    user.lastName = user.lastName;
+    user.lastName = userInfo.lastName;
+    user.role = userInfo.role;
     user.token = localStorage.getItem(StorageField.TOKEN);
     user.exp = localStorage.getItem(StorageField.TOKEN_EXP);
 

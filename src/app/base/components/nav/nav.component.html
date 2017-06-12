@@ -1,5 +1,13 @@
 <clr-header>
-    <div class="header-nav" [clr-nav-level]="1">
-      <button *ngIf="isAuthenticated" class="btn btn-primary" (click)="signOut()">Log out</button>
+  <div class="header-nav" [clr-nav-level]="1">
+    <div class="branding">
+      <a class="logo-and-title" routerlink="/" href="/home">
+        <span class="clr-icon clarity-logo"></span>
+        <span class="title">Oltes</span>
+      </a>
     </div>
+    <a class="nav-link" *ngIf="canUseQuestionBank" routerlinkactive="active" (click)="navigate('question-bank')"><span class="nav-text">Question Bank</span></a>
+    <a class="nav-link" *ngIf="canUseOnlineTest" routerlinkactive="active" (click)="navigate('online-test')"><span class="nav-text">Online Test</span></a>
+    <a class="nav-link" *ngIf="isAuthenticated"><span class="nav-text" (click)="signOut()">Log Out</span></a>
+  </div>
 </clr-header>

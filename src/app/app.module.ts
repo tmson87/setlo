@@ -1,5 +1,7 @@
 import { AppRoutingModule } from './app-routing.module';
 import { BaseModule } from './base/base.module';
+import { QuestionBankModule } from './question-bank/question-bank.module';
+import { OnlineTestModule } from './online-test/online-test.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ClarityModule } from 'clarity-angular';
@@ -25,6 +27,7 @@ import { LoginPageGuard } from './base/guards/login-page.guard';
 
 // Mediator
 import { UserMediator } from './base/mediators/user.mediator';
+import { RouterMediator } from './base/mediators/router.mediator';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,8 @@ import { UserMediator } from './base/mediators/user.mediator';
   imports: [
     BrowserModule,
     BaseModule,
+    QuestionBankModule,
+    OnlineTestModule,
     AppRoutingModule,
     ClarityModule.forRoot(),
     StoreModule.provideStore(reducer, {
@@ -46,6 +51,7 @@ import { UserMediator } from './base/mediators/user.mediator';
         LoginPageGuard,
         UserService,
         UserMediator,
+        RouterMediator,
 
         // providers used to create fake backend
         fakeBackendProvider,

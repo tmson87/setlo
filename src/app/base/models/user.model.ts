@@ -12,4 +12,5 @@ export class User {
   password: string;
   token: string;
   exp: string;
+  role: number;
 }
